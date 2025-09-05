@@ -9,9 +9,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@tensorflow/tfjs": "^4.20.0",
-    "firebase": "^10.14.0",
+    "@dataconnect/generated": "file:src/dataconnect-generated",
+    "@tensorflow/tfjs": "^4.22.0",
+    "firebase": "^10.14.1",
     "lucide-react": "^0.542.0",
+    "papaparse": "^5.5.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-firebase-hooks": "^5.1.1",

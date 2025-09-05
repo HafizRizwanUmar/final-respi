@@ -5,43 +5,32 @@ import pandas as pd
 import tensorflow as tf
 import tensorflowjs as tfjs
 
-DATASET_FILE = "dataset.csv"
-
 # -----------------------------
-# Load Dataset
+# Simple Dataset (hardcoded ads vs normal domains)
 # -----------------------------
-if os.path.exists(DATASET_FILE):
-    print(f"📂 Found {DATASET_FILE}, using real dataset...")
-    df = pd.read_csv(DATASET_FILE)
-else:
-    print("⚠️ No dataset.csv found, generating dummy dataset...")
+ad_domains = [
+    "ads.google.com", "trackers.example.net", "banner.adserver.com",
+    "promo.clickhub.xyz", "metrics.data.net", "beacon.analytics.com",
+    "doubleclick.net", "telemetry.apple.fake", "stats.tracker.org"
+]
 
-    ad_domains = [
-        "ads.google.com", "trackers.example.net", "banner.adserver.com",
-        "promo.clickhub.xyz", "metrics.data.net", "beacon.analytics.com",
-        "doubleclick.net", "telemetry.apple.fake", "stats.tracker.org"
-    ]
+normal_domains = [
+    "google.com", "wikipedia.org", "github.com",
+    "youtube.com", "nytimes.com", "stackoverflow.com",
+    "microsoft.com", "amazon.com", "openai.com"
+]
 
-    normal_domains = [
-        "google.com", "wikipedia.org", "github.com",
-        "youtube.com", "nytimes.com", "stackoverflow.com",
-        "microsoft.com", "amazon.com", "openai.com"
-    ]
+data = []
+for _ in range(500):
+    if random.random() > 0.5:
+        d = random.choice(ad_domains)
+        data.append([d, 1])  # blocked
+    else:
+        d = random.choice(normal_domains)
+        data.append([d, 0])  # allowed
 
-    data = []
-    for _ in range(500):
-        if random.random() > 0.5:
-            d = random.choice(ad_domains)
-            data.append([d, 1])  # blocked
-        else:
-            d = random.choice(normal_domains)
-            data.append([d, 0])  # allowed
-
-    df = pd.DataFrame(data, columns=["domain", "blocked"])
-    df.to_csv(DATASET_FILE, index=False)
-    print(f"✅ Dummy dataset saved as {DATASET_FILE}")
-
-print(f"✅ Loaded {len(df)} rows for training")
+df = pd.DataFrame(data, columns=["domain", "blocked"])
+print(f"✅ Generated dataset with {len(df)} rows")
 
 # -----------------------------
 # Feature Extraction
@@ -52,7 +41,8 @@ def extract_features(domain):
     subdomains = d.count(".") + 1
     has_numbers = 1 if re.search(r"\d{2,}", d) else 0
     keyword_hit = sum(
-        1 for k in ["ads", "track", "metrics", "click", "banner", "promo", "beacon", "telemetry", "doubleclick"]
+        1 for k in ["ads", "track", "metrics", "click", "banner", "promo",
+                    "beacon", "telemetry", "doubleclick"]
         if k in d
     )
     tld = d.split(".")[-1] if "." in d else ""
@@ -69,7 +59,7 @@ y = tf.convert_to_tensor(y, dtype=tf.float32)
 X = X / tf.reduce_max(X, axis=0)
 
 # -----------------------------
-# Build & Train Model
+# Build Model
 # -----------------------------
 model = tf.keras.Sequential([
     tf.keras.layers.Input(shape=(5,)),
@@ -84,9 +74,19 @@ print("🚀 Training model...")
 model.fit(X, y, epochs=15, batch_size=16, validation_split=0.2, verbose=1)
 
 # -----------------------------
-# Save Model for TF.js
+# Save Weights (for TF.js)
 # -----------------------------
 os.makedirs("ml_model", exist_ok=True)
-tfjs.converters.save_keras_model(model, "ml_model")
 
-print("🎉 Model trained & exported to ml_model/ (ready for React frontend)")
+# Save only weights
+model.save_weights("weights.h5")
+
+# Convert weights to TensorFlow.js format
+os.system("tensorflowjs_converter "
+          "--input_format keras "
+          "--output_format tfjs_layers_model "
+          "--weights_only "
+          "weights.h5 "
+          "ml_model")
+
+print("🎉 Weights-only model exported to ml_model/ (ready for React /public/ml_model/)")
