@@ -13,7 +13,7 @@ function confidenceLabel(score) {
 // ---------- FASTAPI HELPERS ----------
 async function checkServer() {
   try {
-    const res = await fetch("https://api.quranoitratacademy.com/python/");
+    const res = await fetch("http://72.60.111.157/python/");
     if (!res.ok) throw new Error("Failed to connect to server");
     return await res.json();
   } catch (err) {
