@@ -24,7 +24,7 @@ async function checkServer() {
 
 async function fetchPrediction(domain) {
   try {
-    const res = await fetch(`https://api.quranoitratacademy.com/python/predict`, {
+    const res = await fetch(`https://72.60.111.157/python/predict`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ domain }),
