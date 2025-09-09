@@ -4,7 +4,7 @@ import { getDatabase } from 'firebase/database'
 
 // TODO: Replace with your Firebase project config
 const firebaseConfig = {
-  apiKey: "AIzaSyCUAgjwF0QPZMbjW9S_9iWI3U0mg54UAoY",
+  apiKey: "AIzaSyCUAgjwF0QpZMbjW9S_9iWI3U0mg54UAoY",
   authDomain: "respbery-pi.firebaseapp.com",
   databaseURL: "https://respbery-pi-default-rtdb.firebaseio.com",
   projectId: "respbery-pi",
