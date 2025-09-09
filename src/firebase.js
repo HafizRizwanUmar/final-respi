@@ -4,14 +4,14 @@ import { getDatabase } from 'firebase/database'
 
 // TODO: Replace with your Firebase project config
 const firebaseConfig = {
-  apiKey: "AIzaSyCYq8-WKplPBQDxoBfwRS-hKomTRlmIYbY",
-  authDomain: "smart-pihole.firebaseapp.com",
-  databaseURL: "https://smart-pihole-default-rtdb.firebaseio.com",
-  projectId: "smart-pihole",
-  storageBucket: "smart-pihole.firebasestorage.app",
-  messagingSenderId: "16194184852",
-  appId: "1:16194184852:web:23bdd7158fcc81dd347681",
-  measurementId: "G-MXJ33T0VDL"
+  apiKey: "AIzaSyCUagjwF0QPZMbJW9S_9iWI3U0mg54UAoY",
+  authDomain: "respbery-pi.firebaseapp.com",
+  databaseURL: "https://respbery-pi-default-rtdb.firebaseio.com",
+  projectId: "respbery-pi",
+  storageBucket: "respbery-pi.firebaseappspot.com",
+  messagingSenderId: "642858637172",
+  appId: "1:642858637172:web:0430a9fe959bab461d3e21",
+  measurementId: "G-V1M7D75ZFH"
 };
 
 export const app = initializeApp(firebaseConfig)
